@@ -92,6 +92,8 @@ class Semgrep(object):
         result=[]
 
         cmd = [
+            "python3",
+            "-m",
             "semgrep",
             "--config",
             config_rules,
