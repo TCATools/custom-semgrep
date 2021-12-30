@@ -69,10 +69,10 @@ class Semgrep(object):
 
         path_str = os.environ["PATH"]
         path_list = path_str.split(os.pathsep)
-        print(path_str)
-        print(path_list)
-        # path_list = path_list[2:]
-        # os.environ.update({"PATH": os.pathsep.join(path_list)})
+        path_list = path_list[1:]
+        new_path_str = os.pathsep.join(path_list)
+        os.environ.update({"PATH": new_path_str})
+        print("[debug] PATH: %s" % new_path_str)
 
         # 过滤路径(通配符)
         exclude_path = task_params["path_filters"]["exclusion"]
