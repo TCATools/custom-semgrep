@@ -66,6 +66,14 @@ class Semgrep(object):
         # 环境变量
         envs = task_params["envs"]
         print("[debug] envs: %s" % envs)
+
+        path_str = os.environ["PATH"]
+        path_list = path_str.split(os.pathsep)
+        print(path_str)
+        print(path_list)
+        # path_list = path_list[2:]
+        # os.environ.update({"PATH": os.pathsep.join(path_list)})
+
         # 过滤路径(通配符)
         exclude_path = task_params["path_filters"]["exclusion"]
         include_path = task_params["path_filters"]["inclusion"]
