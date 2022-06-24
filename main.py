@@ -86,12 +86,21 @@ class Semgrep(object):
         # ------------------------------------------------------------------ #
         # 从 DIFF_FILES 环境变量中获取增量文件列表存放的文件(全量扫描时没有这个环境变量)
         diff_file_json = os.environ.get("DIFF_FILES")
+        scan_file_json = os.environ.get("SCAN_FILES")
         if diff_file_json:  # 如果存在 DIFF_FILES, 说明是增量扫描, 直接获取增量文件列表
             print("get diff file: %s" % diff_file_json)
             with open(diff_file_json, "r") as rf:
                 diff_files = json.load(rf)
                 scan_files = [path for path in diff_files]
-        else:  # 未获取到环境变量,即全量扫描,遍历source_dir获取需要扫描的文件列表
+        else:
+            if os.environ.get("TCA_QUICK_SCAN") and scan_file_json:
+                print("get scan file: %s" % scan_file_json)
+                with open(scan_file_json, "r") as rf:
+                    files = json.load(rf)
+                    scan_files = [path for path in files]
+            else:  # 未获取到环境变量,即全量扫描,遍历source_dir获取需要扫描的文件列表
+                scan_files = [source_dir]
+        if len(" ".join(scan_files)) > 100000:
             scan_files = [source_dir]
 
         # 设置配置文件、输出文件和结果文件
