@@ -103,6 +103,9 @@ class Semgrep(object):
         if len(" ".join(scan_files)) > 100000:
             scan_files = [source_dir]
 
+        if not self.check_tool_version():
+            return
+
         # 设置配置文件、输出文件和结果文件
         config_rules = self.config(rules)
         error_output = "error_output.json"
@@ -112,9 +115,9 @@ class Semgrep(object):
             "python3",
             "-m",
             "semgrep",
+            "scan",
             "--config",
             config_rules,
-            "--dangerously-allow-arbitrary-code-execution-from-rules",
             "--no-git-ignore",
             "--json",
             "--output",
@@ -172,6 +175,34 @@ class Semgrep(object):
         # 输出结果到指定的json文件
         with open("result.json", "w") as fp:
             json.dump(result, fp, indent=2)
+
+    def check_tool_version(self):
+        """
+        检查semgrep是否安装以及安装版本，需要升级到0.100.0
+        """
+        version_line = ""
+        cmd = ["python3", "-m", "semgrep", "--version"]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        try:
+            for line in p.stdout:
+                line = bytes.decode(line.strip())
+                if line.startswith("0."):
+                    version_line = line
+        finally:
+            p.terminate()
+            p.wait()
+        if p.returncode == 0:
+            if len(version_line) > 0:
+                print("[debug] semgrep version: %s" % version_line)
+                version = int(version_line.split(".")[1])
+                print(version)
+                if version < 100:
+                    print("[error] 由于规则更新, 请将semgrep工具升级至0.100.0版本，升级命令: python3 -m pip install --upgrade semgrep==0.100.0")
+                    return False
+                else:
+                    return True
+        print("[error] 本地需安装semgrep工具，安装命令: python3 -m pip install semgrep==0.100.0")
+        return False
 
 if __name__ == '__main__':
     print("-- start run tool ...")
