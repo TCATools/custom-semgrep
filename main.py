@@ -195,7 +195,6 @@ class Semgrep(object):
             if len(version_line) > 0:
                 print("[debug] semgrep version: %s" % version_line)
                 version = int(version_line.split(".")[1])
-                print(version)
                 if version < 100:
                     print("[error] 由于规则更新, 请将semgrep工具升级至0.100.0版本，升级命令: python3 -m pip install --upgrade semgrep==0.100.0")
                     return False
