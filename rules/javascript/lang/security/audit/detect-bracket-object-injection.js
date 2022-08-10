@@ -9,12 +9,12 @@ const validate = function() {
   if (field !== undefined) {
     return ValidationManager.validateField(fieldName, field.value, validations);
   }
-  // ruleid:detect-bracket-object-injection
   const badField = formData[formData["foo"]];
-  // ok
   const goodField = formData[someOtherField];
-  // ok
   const someField = formData["bar"]
+  const email = formData.split("@")[0];
+  const email = formData.split("@")[0 + a];
+  const email = formData.split("@")[a + 0];
   return {
     name: fieldName,
     value: '',
