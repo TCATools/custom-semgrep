@@ -119,6 +119,7 @@ class Semgrep(object):
             "--config",
             config_rules,
             "--no-git-ignore",
+            "--no-rewrite-rule-ids",
             "--json",
             "--output",
             error_output
@@ -164,7 +165,7 @@ class Semgrep(object):
                 issue['line'] = item['start']['line']
                 issue['column'] = item['start']['col']
                 issue['msg'] = item['extra']['message']
-                rule_name = item['check_id'].split(".")[-1]
+                rule_name = item['check_id']
                 if rule_name not in rules:
                     continue
                 issue['rule'] = rule_name
