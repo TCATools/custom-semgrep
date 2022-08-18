@@ -30,10 +30,11 @@ class Semgrep(object):
         """
         rules_path = os.path.abspath("./rules")
         relpos = len(rules_path) + 1
+        endsuff = [".yaml", ".yml"]
         filelist = []
         for dirpath, _, files in os.walk(rules_path):
             for filename in files:
-                if filename.endswith('.yaml'):
+                if filename.lower().endswith(tuple(endsuff)):
                     filelist.append(os.path.join(dirpath, filename))
         config_rules_path = os.path.abspath("./config_rules")
         if os.path.exists(config_rules_path):
