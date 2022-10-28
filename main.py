@@ -68,10 +68,15 @@ class Semgrep(object):
         envs = task_params["envs"]
         print("[debug] envs: %s" % envs)
 
+        # 使用机器环境安装的Python
         path_str = os.environ["PATH"]
         path_list = path_str.split(os.pathsep)
-        path_list = path_list[1:]
-        new_path_str = os.pathsep.join(path_list)
+        new_path_list = []
+        for path in path_list:
+            if ("linux-Python-v3.7.2" or "mac-Python-v3.7.0" or "win-Python-v3.7.0") in path:
+                continue
+            new_path_list.append(path)
+        new_path_str = os.pathsep.join(new_path_list)
         os.environ.update({"PATH": new_path_str})
         print("[debug] PATH: %s" % new_path_str)
 
