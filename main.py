@@ -73,7 +73,7 @@ class Semgrep(object):
         path_list = path_str.split(os.pathsep)
         new_path_list = []
         for path in path_list:
-            if ("linux-Python-v3.7.2" or "mac-Python-v3.7.0" or "win-Python-v3.7.0") in path:
+            if "linux-Python-v3.7.2" in path or "mac-Python-v3.7.0" in path or "win-Python-v3.7.0" in path:
                 continue
             new_path_list.append(path)
         new_path_str = os.pathsep.join(new_path_list)
