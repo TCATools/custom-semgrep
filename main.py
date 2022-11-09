@@ -139,7 +139,7 @@ class Semgrep(object):
             cmd.extend(exclude)
 
         if not scan_files:
-            print("[error] 文件列表为空")
+            print("[error] File list is empty.")
             with open("result.json", "w") as fp:
                 json.dump(result, fp, indent=2)
             return
@@ -156,7 +156,7 @@ class Semgrep(object):
             with open(error_output, "r") as f:
                 outputs_data = json.load(f)
         except:
-            print("[error] 结果文件未找到或无法加载")
+            print("[error] Resulting file not found or cannot be loaded")
             with open("result.json", "w") as fp:
                 json.dump(result, fp, indent=2)
             return
@@ -164,7 +164,7 @@ class Semgrep(object):
         if outputs_data:
             if(len(outputs_data['errors']) > 0):
                 error = outputs_data['errors'][0]
-                print("错误信息: %s" % json.dumps(error, indent=2))
+                print("[error]: %s" % json.dumps(error, indent=2))
             for item in outputs_data['results']:
                 issue = {}
                 issue['path'] = item['path']
@@ -203,11 +203,11 @@ class Semgrep(object):
                 print("[debug] semgrep version: %s" % version_line)
                 version = int(version_line.split(".")[1])
                 if version < 100:
-                    print("[error] 由于规则更新, 请将semgrep工具升级至0.100.0版本，升级命令: python3 -m pip install --upgrade semgrep==0.100.0")
+                    print("[error] Due to rule update, please upgrade semgrep to version 0.100.0, command: python3 -m pip install --upgrade semgrep==0.100.0")
                     return False
                 else:
                     return True
-        print("[error] 本地需安装semgrep工具，安装命令: python3 -m pip install semgrep==0.100.0")
+        print("[error] Semgrep should be installed locally, command: python3 -m pip install semgrep==0.100.0")
         return False
 
 if __name__ == '__main__':
