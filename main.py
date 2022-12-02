@@ -10,6 +10,7 @@ import json
 import yaml
 import shutil
 import subprocess
+import sys
 
 class Semgrep(object):
     def __get_task_params(self):
@@ -69,12 +70,13 @@ class Semgrep(object):
         print("[debug] envs: %s" % envs)
 
         # 使用机器环境安装的Python
+        # 2022-12-02更新，tca自带python3安装semgrep
         path_str = os.environ["PATH"]
         path_list = path_str.split(os.pathsep)
         new_path_list = []
         for path in path_list:
-            if "linux-Python-v3.7.2" in path or "mac-Python-v3.7.0" in path or "win-Python-v3.7.0" in path:
-                continue
+            # if "linux-Python-v3.7.2" in path or "mac-Python-v3.7.0" in path or "win-Python-v3.7.0" in path:
+                # continue
             new_path_list.append(path)
         new_path_str = os.pathsep.join(new_path_list)
         os.environ.update({"PATH": new_path_str})
@@ -187,6 +189,9 @@ class Semgrep(object):
         """
         检查semgrep是否安装以及安装版本，需要升级到0.100.0
         """
+        if sys.platform in ("win32"):
+            print("[error] Semgrep can not be installed in windows")
+            return False
         version_line = ""
         cmd = ["python3", "-m", "semgrep", "--version"]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
