@@ -63,6 +63,8 @@ class Semgrep(object):
         # 代码目录直接从环境变量获取
         source_dir = os.environ.get("SOURCE_DIR", None)
         print("[debug] source_dir: %s" % source_dir)
+        # 结果目录直接从环境变量获取
+        result_dir = os.environ.get("RESULT_DIR", os.getcwd())
         # 其他参数从task_request.json文件获取
         task_params = self.__get_task_params()
         # 环境变量
@@ -116,7 +118,7 @@ class Semgrep(object):
 
         # 设置配置文件、输出文件和结果文件
         config_rules = self.config(rules)
-        error_output = "error_output.json"
+        error_output = os.path.join(result_dir, "error_output.json")
         result=[]
 
         cmd = [
@@ -149,8 +151,10 @@ class Semgrep(object):
 
         scan_cmd = " ".join(cmd)
         print("[debug] cmd: %s" % scan_cmd)
-        # subproc = subprocess.Popen(scan_cmd, shell=True)
-        subprocess.check_output(cmd)
+        # 优化调用方式
+        subproc = subprocess.Popen(scan_cmd, shell=True)
+        subproc.communicate()
+        # subprocess.check_output(cmd)
 
         print("start data handle")
         # 数据处理
@@ -182,7 +186,8 @@ class Semgrep(object):
                     result.append(issue)
 
         # 输出结果到指定的json文件
-        with open("result.json", "w") as fp:
+        result_path = os.path.join(result_dir, "result.json")
+        with open(result_path, "w") as fp:
             json.dump(result, fp, indent=2)
 
     def check_tool_version(self):
