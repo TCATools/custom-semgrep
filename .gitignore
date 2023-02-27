@@ -1,0 +1,4 @@
+config_rules/
+new/
+old/
+/*.json

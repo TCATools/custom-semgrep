@@ -1,0 +1,38 @@
+rules:
+  - id: connection-not-closed
+    patterns:
+      - pattern: $CONN = $VAR.getConnection(...);
+      - pattern-not-inside: |
+          $CONN = $VAR.getConnection(...);
+          ...
+          $F.closeConnection($CONN);
+      - pattern-not-inside: |
+          $CONN = $VAR.getConnection(...);
+          ...
+          $CONN.close();
+      - pattern-not-inside: |
+          try {
+            ...
+          }
+          catch (...) {
+            ...
+          }
+          finally {
+            $F.closeConnection($CONN);
+            ...
+          }
+      - pattern-not-inside: |
+          try {
+            ...
+          }
+          catch (...) {
+            ...
+          }
+          finally {
+            $CONN.close();
+            ...
+          }
+    message: Connection opened without corresponding close
+    languages:
+      - java
+    severity: ERROR
