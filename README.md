@@ -5,6 +5,8 @@
 
 工具规则: [https://github.com/returntocorp/semgrep-rules](https://github.com/returntocorp/semgrep-rules)
 
+[工具集成](./工具集成.md)
+
 ## 版本
 semgrep: v0.100.0
 
