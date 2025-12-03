@@ -1,0 +1,23 @@
+rules:
+- id: detected-private-key
+  patterns:
+    - pattern-either:
+      - patterns:
+        - pattern:
+            -----BEGIN $TYPE PRIVATE KEY-----
+            $KEY
+        - metavariable-regex:
+            metavariable: $TYPE
+            regex: (?i)([dr]sa|ec|openssh|encrypted)?
+      - patterns:
+        - pattern: |
+            -----BEGIN PRIVATE KEY-----
+            $KEY
+    - metavariable-analysis:
+        metavariable: $KEY
+        analyzer: entropy
+  languages: [generic]
+  message: Potential private key detected
+  severity: ERROR
+  metadata:
+    category: security
